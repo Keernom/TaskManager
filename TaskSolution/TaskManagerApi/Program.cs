@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using TaskManagerApi.Data;
+
 namespace TaskManagerApi
 {
     public class Program
@@ -13,6 +16,9 @@ namespace TaskManagerApi
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            string conn = builder.Configuration.GetConnectionString("TestDb");
+            builder.Services.AddDbContext<AppDbContext>(opts => opts.UseNpgsql(conn));
 
             var app = builder.Build();
 
