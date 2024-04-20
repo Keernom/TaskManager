@@ -1,4 +1,5 @@
-﻿using Entities.Models;
+﻿using Entities.Enums;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace TaskManagerApi.Data
 
         public AppDbContext(DbContextOptions<AppDbContext> contextOptions) : base(contextOptions)
         {
-            Database.EnsureDeleted();
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
 
             if (!Users.Any(u => u.Status == UserStatus.Admin))
@@ -30,7 +31,7 @@ namespace TaskManagerApi.Data
                     Email = "admin",
                     Password = "qwerty123",
                     Status = UserStatus.Admin,
-                    RegistrationDate = DateTime.Now,
+                    RegistrationDate = DateTime.UtcNow,
                 };
 
                 Users.Add(admin);
