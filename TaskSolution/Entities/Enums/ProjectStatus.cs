@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.Models
+namespace Entities.Enums
 {
-    public enum UserStatus
+    public enum ProjectStatus
     {
-        Admin,
-        Editor,
-        User
+        InProgress,
+        Suspended,
+        Completed
     }
 }
