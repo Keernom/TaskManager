@@ -1,6 +1,11 @@
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using TaskManagerApi.Auth;
 using TaskManagerApi.Data;
+using TaskManagerApi.Services;
 
 namespace TaskManagerApi
 {
@@ -20,6 +25,36 @@ namespace TaskManagerApi
             string conn = builder.Configuration.GetConnectionString("TestDb");
             builder.Services.AddDbContext<AppDbContext>(opts => opts.UseNpgsql(conn));
 
+            // JWT AUTH
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.RequireHttpsMetadata = false;
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            // укзывает, будет ли валидироваться издатель при валидации токена
+                            ValidateIssuer = true,
+                            // строка, представляющая издателя
+                            ValidIssuer = AuthOptions.ISSUER,
+
+                            // будет ли валидироваться потребитель токена
+                            ValidateAudience = true,
+                            // установка потребителя токена
+                            ValidAudience = AuthOptions.AUDIENCE,
+                            // будет ли валидироваться время существования
+                            ValidateLifetime = true,
+
+                            // установка ключа безопасности
+                            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                            // валидация ключа безопасности
+                            ValidateIssuerSigningKey = true,
+                        };
+                    });
+
+            // Custom Services
+            builder.Services.AddTransient<UserService>();
+            builder.Services.AddTransient<AccountService>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -31,8 +66,8 @@ namespace TaskManagerApi
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 

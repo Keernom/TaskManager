@@ -1,19 +1,26 @@
 ﻿using Entities.DTOs;
 using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagerApi.Data;
+using TaskManagerApi.Services;
 
 namespace TaskManagerApi.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
         private readonly AppDbContext _db;
+        private readonly UserService _userService;
+        private readonly AccountService _accountService;
 
-        public UsersController(AppDbContext appDbContext)
+        public UsersController(AppDbContext appDbContext, UserService userService, AccountService accountService)
         {
             _db = appDbContext;
+            _userService = userService;
+            _accountService = accountService;
         }
 
         [HttpGet("all")]
@@ -86,7 +93,7 @@ namespace TaskManagerApi.Controllers
             return Ok();
         }
 
-
+        
         [HttpPost("mCreate")]
         public async Task<IActionResult> MultipleUserCreate([FromBody] IEnumerable<UserDTO> userDTOs)
         {
