@@ -36,11 +36,8 @@ namespace TaskManagerApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetUser(int id)
         {
-            User u = _db.Users.FirstOrDefault(x => x.Id == id);
-
-            if (u == null) return NotFound();
-
-            return Ok(u.ToUserDTO());
+            UserDTO u = _userService.Get(id);
+            return u == null ? NotFound() : Ok(u);
         }
 
         [HttpPost]

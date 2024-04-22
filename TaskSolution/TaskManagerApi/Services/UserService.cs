@@ -1,5 +1,4 @@
-﻿using Entities.Abstractions;
-using Entities.DTOs;
+﻿using Entities.DTOs;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -102,6 +101,21 @@ namespace TaskManagerApi.Services
             await _db.SaveChangesAsync();
 
             return true;
+        }
+
+        public UserDTO Get(int id)
+        {
+            User user = _db.Users.FirstOrDefault(u => u.Id == id);
+            return user?.ToUserDTO();
+        }
+
+        public IEnumerable<UserDTO> GetUsersByIds(List<int> ids) 
+        {
+            foreach(int id in ids)
+            {
+                UserDTO user = _db.Users.FirstOrDefault(u => u.Id == id).ToUserDTO();
+                yield return user;
+            }
         }
     }
 }
