@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.Adstactions
+namespace Entities.Abstractions
 {
     public abstract class CommonObject
     {

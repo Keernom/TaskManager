@@ -1,4 +1,4 @@
-﻿using Entities.Adstactions;
+﻿using Entities.Abstractions;
 using Entities.Enums;
 using System;
 using System.Collections.Generic;
