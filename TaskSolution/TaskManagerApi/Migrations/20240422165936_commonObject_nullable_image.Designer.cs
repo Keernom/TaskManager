@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TaskManagerApi.Data;
@@ -11,9 +12,11 @@ using TaskManagerApi.Data;
 namespace TaskManagerApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240422165936_commonObject_nullable_image")]
+    partial class commonObject_nullable_image
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,6 +48,7 @@ namespace TaskManagerApi.Migrations
                         .HasColumnType("text");
 
                     b.Property<byte[]>("Image")
+                        .IsRequired()
                         .HasColumnType("bytea");
 
                     b.Property<bool>("IsPrivate")
@@ -85,6 +89,7 @@ namespace TaskManagerApi.Migrations
                         .HasColumnType("text");
 
                     b.Property<byte[]>("Image")
+                        .IsRequired()
                         .HasColumnType("bytea");
 
                     b.Property<string>("Name")
@@ -155,6 +160,7 @@ namespace TaskManagerApi.Migrations
                         .HasColumnType("bytea");
 
                     b.Property<byte[]>("Image")
+                        .IsRequired()
                         .HasColumnType("bytea");
 
                     b.Property<string>("Name")

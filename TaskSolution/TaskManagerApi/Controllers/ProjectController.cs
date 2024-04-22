@@ -60,11 +60,16 @@ namespace TaskManagerApi.Controllers
 
             if (user == null) return Unauthorized();
 
-            if (user.Status == UserStatus.Admin || user.Status == UserStatus.Editor)
+            if (!(user.Status == UserStatus.Admin || user.Status == UserStatus.Editor))
                 return Unauthorized();
 
             var admin = _db.ProjectAdmins.FirstOrDefault(admin => admin.Id == user.Id);
-            if (admin == null) _db.ProjectAdmins.Add(new ProjectAdmin(user));
+            if (admin == null)
+            {
+                admin = new ProjectAdmin(user);
+                _db.ProjectAdmins.Add(admin);
+                _db.SaveChanges();
+            }
             projectDTO.AdminId = admin.Id;
 
             bool result = _projectService.Create(projectDTO);
@@ -81,7 +86,7 @@ namespace TaskManagerApi.Controllers
 
             if (user == null) return Unauthorized();
 
-            if (user.Status == UserStatus.Admin || user.Status == UserStatus.Editor)
+            if (!(user.Status == UserStatus.Admin || user.Status == UserStatus.Editor))
                 return Unauthorized();
 
             bool result = _projectService.Update(id, projectDTO);
@@ -96,7 +101,7 @@ namespace TaskManagerApi.Controllers
 
             if (user == null) return Unauthorized();
 
-            if (user.Status == UserStatus.Admin || user.Status == UserStatus.Editor)
+            if (!(user.Status == UserStatus.Admin || user.Status == UserStatus.Editor))
                 return Unauthorized();
 
             bool result = _projectService.Delete(id);
@@ -113,7 +118,7 @@ namespace TaskManagerApi.Controllers
 
             if (user == null) return Unauthorized();
 
-            if (user.Status == UserStatus.Admin || user.Status == UserStatus.Editor)
+            if (!(user.Status == UserStatus.Admin || user.Status == UserStatus.Editor))
                 return Unauthorized();
 
             _projectService.AddUsersToProject(id, usersIds);
@@ -121,7 +126,7 @@ namespace TaskManagerApi.Controllers
             return Ok();
         }
 
-        [HttpPatch("{id}/users/remove/{userId}")]
+        [HttpPatch("{id}/users/remove")]
         public IActionResult RemoveUsersFromProj(int id, [FromBody] List<int> usersIds)
         {
             if (usersIds == null) return BadRequest();
@@ -130,7 +135,7 @@ namespace TaskManagerApi.Controllers
 
             if (user == null) return Unauthorized();
 
-            if (user.Status == UserStatus.Admin || user.Status == UserStatus.Editor)
+            if (!(user.Status == UserStatus.Admin || user.Status == UserStatus.Editor))
                 return Unauthorized();
 
             _projectService.RemoveUsersFromProj(id, usersIds);

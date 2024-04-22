@@ -12,7 +12,7 @@ namespace Entities.Abstractions
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime CreatedDate { get; set; }
-        public byte[] Image { get; set; }
+        public byte[]? Image { get; set; }
 
         public CommonObject()
         {

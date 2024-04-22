@@ -1,4 +1,5 @@
-﻿using Entities.DTOs;
+﻿using Entities.Abstractions;
+using Entities.DTOs;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -40,13 +41,20 @@ namespace TaskManagerApi.Services
 
         public ProjectDTO Get(int id)
         {
-            Project project = _db.Projects.FirstOrDefault(p => p.Id == id);
-            return project?.ToDto();
+            Project project = _db.Projects.Include(p => p.Users).FirstOrDefault(p => p.Id == id);
+            var projectDTO = project?.ToDto();
+
+            if (projectDTO != null)
+            {
+                projectDTO.UsersIds = project.Users.Select(u => u.Id).ToList();
+            }
+
+            return projectDTO;
         }
 
-        public async Task<IEnumerable<ProjectDTO>> GetAll()
+        public async Task<IEnumerable<CommonDTO>> GetAll()
         {
-            return await _db.Projects.Select(p => p.ToDto()).ToListAsync();
+            return await _db.Projects.Select(p => p.ToDto() as CommonDTO).ToListAsync();
         }
 
         public async Task<IEnumerable<ProjectDTO>> GetByUserId(int userId)
@@ -90,6 +98,8 @@ namespace TaskManagerApi.Services
         public void AddUsersToProject(int projectId, IEnumerable<int> usersId)
         {
             var project = _db.Projects.Include(p => p.Users).FirstOrDefault(p => p.Id == projectId);
+
+            if (project == null) return;
 
             foreach (var userId in usersId)
             {
