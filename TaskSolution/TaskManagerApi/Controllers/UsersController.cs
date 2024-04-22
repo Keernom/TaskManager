@@ -43,54 +43,32 @@ namespace TaskManagerApi.Controllers
             return Ok(u.ToUserDTO());
         }
 
-        [HttpPost("create")]
+        [HttpPost]
         public IActionResult CreateUser([FromBody] UserDTO userModel)
         {
             if (userModel == null) return BadRequest();
 
-            User newUser = new User(userModel.FirstName, userModel.LastName, userModel.Email,
-                userModel.Password, userModel.PhoneNumber, userModel.Image, userModel.Status);
+            bool result = _userService.Create(userModel);
 
-            _db.Users.Add(newUser);
-            _db.SaveChanges();
-
-            return Ok();
+            return result ? Ok() : NotFound();
         }
 
-        [HttpPatch("{id}/update")]
+        [HttpPatch("{id}")]
         public IActionResult UpdateUser(int id, [FromBody] UserDTO userModel)
         {
             if (userModel == null) return BadRequest();
 
-            User u = _db.Users.FirstOrDefault(x => x.Id == id);
+            bool result = _userService.Update(id, userModel);
 
-            if (u == null) return NotFound();
-
-            u.FirstName = userModel.FirstName;
-            u.LastName = userModel.LastName;
-            u.Email = userModel.Email;
-            u.Password = userModel.Password;
-            u.PhoneNumber = userModel.PhoneNumber;
-            u.Image = userModel.Image;
-            u.Status = userModel.Status;
-
-            _db.Users.Update(u);
-            _db.SaveChanges();
-
-            return Ok();
+            return result ? Ok() : NotFound();
         }
 
         [HttpDelete(("{id}"))]
         public IActionResult DeleteUser(int id)
         {
-            User u = _db.Users.FirstOrDefault(x => x.Id == id);
+            bool result = _userService.Delete(id);
 
-            if (u == null) return NotFound();
-
-            _db.Users.Remove(u);
-            _db.SaveChanges();
-
-            return Ok();
+            return result ? Ok() : NotFound();
         }
 
         
@@ -99,12 +77,9 @@ namespace TaskManagerApi.Controllers
         {
             if (userDTOs == null || userDTOs.Count() == 0) return BadRequest();
 
-            IEnumerable<User> users = userDTOs.Select(u => new User(u));
-            await _db.AddRangeAsync(users);
+            bool result = await _userService.MultipleUserCreate(userDTOs);
 
-            await _db.SaveChangesAsync();
-
-            return Ok();
+            return result ? Ok() : NotFound();
         }
     }
 }
