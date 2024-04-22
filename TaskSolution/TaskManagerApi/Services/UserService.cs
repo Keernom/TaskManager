@@ -4,10 +4,11 @@ using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TaskManagerApi.Data;
+using TaskManagerApi.Services.Abstracts;
 
 namespace TaskManagerApi.Services
 {
-    public class UserService : ICommonService<UserDTO>
+    public class UserService : AbstractService, ICommonService<UserDTO>
     {
         private readonly AppDbContext _db;
 
@@ -19,6 +20,11 @@ namespace TaskManagerApi.Services
         public User GetUser(string login, string password)
         {
             return _db.Users.FirstOrDefault(u => u.Email == login && u.Password == password);
+        }
+
+        public User GetUser(string login)
+        {
+            return _db.Users.FirstOrDefault(u => u.Email == login);
         }
 
         public ClaimsIdentity GetIdentity(string username, string password)
@@ -96,22 +102,6 @@ namespace TaskManagerApi.Services
             await _db.SaveChangesAsync();
 
             return true;
-        }
-
-        public bool DoAction(Action action)
-        {
-            if (action == null) return false;
-
-            try
-            {
-                action();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return false;
-            }
         }
     }
 }
