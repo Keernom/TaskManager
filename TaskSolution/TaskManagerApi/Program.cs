@@ -56,6 +56,7 @@ namespace TaskManagerApi
             builder.Services.AddTransient<AccountService>();
             builder.Services.AddTransient<ProjectService>();
             builder.Services.AddTransient<DeskService>();
+            builder.Services.AddControllers().AddNewtonsoftJson();
 
             var app = builder.Build();
 
