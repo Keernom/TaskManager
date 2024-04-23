@@ -44,7 +44,7 @@ namespace TaskManagerApi.Services
             Desk desk  = _db.Desks.Include(d => d.Tasks).FirstOrDefault(x => x.Id == id);
             var deskDTO = desk?.ToDto();
 
-            if (deskDTO == null)
+            if (deskDTO != null)
             {
                 deskDTO.TasksIds = desk?.Tasks.Select(t => t.Id).ToList();
             }
@@ -65,6 +65,9 @@ namespace TaskManagerApi.Services
                 desk.IsPrivate = model.IsPrivate;
                 desk.ProjectId = model.ProjectId;
                 desk.Columns = JsonConvert.SerializeObject(model.Columns);
+
+                _db.Desks.Update(desk);
+                _db.SaveChanges();
             });
         }
 
