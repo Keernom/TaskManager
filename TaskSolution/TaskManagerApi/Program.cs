@@ -55,6 +55,7 @@ namespace TaskManagerApi
             builder.Services.AddTransient<UserService>();
             builder.Services.AddTransient<AccountService>();
             builder.Services.AddTransient<ProjectService>();
+            builder.Services.AddTransient<DeskService>();
 
             var app = builder.Build();
 

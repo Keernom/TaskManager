@@ -41,12 +41,17 @@ namespace TaskManagerApi.Services
 
         public ProjectDTO Get(int id)
         {
-            Project project = _db.Projects.Include(p => p.Users).FirstOrDefault(p => p.Id == id);
+            Project project = _db.Projects
+                .Include(p => p.Users)
+                .Include(p => p.Desks)
+                .FirstOrDefault(p => p.Id == id);
+
             var projectDTO = project?.ToDto();
 
             if (projectDTO != null)
             {
                 projectDTO.UsersIds = project.Users.Select(u => u.Id).ToList();
+                projectDTO.DesksIds = project.Desks.Select(d => d.Id).ToList();
             }
 
             return projectDTO;
@@ -104,7 +109,11 @@ namespace TaskManagerApi.Services
             foreach (var userId in usersId)
             {
                 User user = _db.Users.FirstOrDefault(u => u.Id == userId);
-                project.Users.Add(user);
+
+                if (!project.Users.Contains(user))
+                {
+                    project.Users.Add(user);
+                }
             }
 
             _db.SaveChanges();
