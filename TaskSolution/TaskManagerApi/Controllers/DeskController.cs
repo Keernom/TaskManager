@@ -43,7 +43,7 @@ namespace TaskManagerApi.Controllers
             return desk == null ? NotFound() : Ok(desk);
         }
 
-        [HttpGet("project/{projectId}")]
+        [HttpGet("project")]
         public async Task<IActionResult> GetProjectDesk(int projectId)
         {
             var user = _userService.GetUser(HttpContext.User.Identity.Name);
