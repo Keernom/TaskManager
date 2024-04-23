@@ -62,6 +62,7 @@ namespace TaskManagerApi.Controllers
             var user = _userService.GetUser(HttpContext.User.Identity.Name);
             if (user == null) return Unauthorized();
 
+            deskDTO.AdminId = user.Id;
             var result = _deskService.Create(deskDTO);
 
             return result ? Ok() : NotFound();
