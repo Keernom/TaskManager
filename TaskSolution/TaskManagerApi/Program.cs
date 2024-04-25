@@ -75,6 +75,8 @@ namespace TaskManagerApi
 
             app.MapControllers();
 
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
             app.Run();
         }
     }
