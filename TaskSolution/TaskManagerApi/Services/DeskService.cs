@@ -75,7 +75,7 @@ namespace TaskManagerApi.Services
         {
             return await _db.Desks
                 .Where(d => d.AdminId == userId)
-                .Select(d => d.ToDto() as CommonDTO)
+                .Select(d => d.ToCommonDTO())
                 .ToListAsync();
         }
 
@@ -83,7 +83,7 @@ namespace TaskManagerApi.Services
         {
             return await _db.Desks
                 .Where(d => d.ProjectId == projectId && (d.AdminId == userId || !d.IsPrivate))
-                .Select(d => d.ToDto())
+                .Select(d => d.ToCommonDTO())
                 .ToListAsync();
         }
     }

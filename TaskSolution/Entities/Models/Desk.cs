@@ -47,5 +47,17 @@ namespace Entities.Models
                 ProjectId = ProjectId,
             };
         }
+
+        public CommonDTO ToCommonDTO()
+        {
+            return new CommonDTO()
+            {
+                Id = Id,
+                Name = Name,
+                Description = Description,
+                CreatedDate = CreatedDate,
+                Image = Image
+            };
+        }
     }
 }

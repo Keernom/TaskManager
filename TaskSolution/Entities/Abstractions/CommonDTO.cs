@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entities.Abstractions
 {
-    public abstract class CommonDTO
+    public class CommonDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
