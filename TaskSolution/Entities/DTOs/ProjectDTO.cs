@@ -13,7 +13,7 @@ namespace Entities.DTOs
     {
         public int? AdminId { get; set; }
         public ProjectStatus Status { get; set; }
-        public List<int> UsersIds { get; set; } 
-        public List<int> DesksIds { get; set; }
+        public List<int>? UsersIds { get; set; } 
+        public List<int>? DesksIds { get; set; }
     }
 }
