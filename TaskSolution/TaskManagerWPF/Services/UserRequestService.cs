@@ -19,7 +19,7 @@ namespace TaskManagerWPF.Services
         private const string HOST = "https://localhost:7090/api";
         private string _userController = $"{HOST}/users";
 
-        private T GetDataByUrl<T>(string url, AuthToken token, string username = null, string password = null)
+        private (T value, HttpStatusCode code) GetDataByUrl<T>(string url, AuthToken token, string username = null, string password = null)
         {
             HttpWebRequest webRequest = (HttpWebRequest) WebRequest.Create(url);
             webRequest.Method = "GET";
@@ -33,7 +33,7 @@ namespace TaskManagerWPF.Services
 
             if (token.Access_Token != null)
             {
-                webRequest.Headers.Add("Authorization", token.Access_Token);
+                webRequest.Headers.Add("Authorization", "Bearer " + token.Access_Token);
             }
 
             HttpWebResponse response = (HttpWebResponse)webRequest.GetResponse();
@@ -42,11 +42,12 @@ namespace TaskManagerWPF.Services
             {
                 string responseText = sr.ReadToEnd();
                 T res = JsonConvert.DeserializeObject<T>(responseText);
-                return res;
+
+                return (res, response.StatusCode);
             }
         }
 
-        private async Task<HttpStatusCode> DoActionWithDataByUrl(HttpMethod method, string url, AuthToken authToken, string data = null)
+        private async Task<HttpStatusCode> DoActionWithDataByUrl(HttpMethod method, string url, AuthToken authToken, string data = "")
         {
             HttpResponseMessage result = new HttpResponseMessage();
             HttpClient client = new HttpClient();
@@ -58,15 +59,15 @@ namespace TaskManagerWPF.Services
 
             result = method.Method switch
             {
-                "Post" => await client.PostAsync(url, content),
-                "Patch" => await client.PatchAsync(url, content),
-                "Delete" => await client.DeleteAsync(url)
+                "POST" => await client.PostAsync(url, content),
+                "PATCH" => await client.PatchAsync(url, content),
+                "DELETE" => await client.DeleteAsync(url)
             };
 
             return result.StatusCode;
         }
 
-        public AuthToken GetToken(string username, string password)
+        public (AuthToken token, HttpStatusCode code) GetToken(string username, string password)
         {
             string url = $"{HOST}/account/token";
             return GetDataByUrl<AuthToken>(url, new AuthToken() ,username, password);
@@ -80,9 +81,9 @@ namespace TaskManagerWPF.Services
             return result;
         }
 
-        public List<UserDTO> GetUsers(AuthToken token)
+        public (List<UserDTO> users, HttpStatusCode code) GetUsers(AuthToken token)
         {
-            var users = GetDataByUrl<List<UserDTO>>(_userController, token);
+            var users = GetDataByUrl<List<UserDTO>>(_userController + $"/all", token);
             return users;
         }
 
@@ -93,10 +94,10 @@ namespace TaskManagerWPF.Services
             return result;
         }
 
-        public async Task<HttpStatusCode> CreateMultipleUser(AuthToken token, List<UserDTO> users)
+        public async Task<HttpStatusCode> CreateMultipleUsers(AuthToken token, List<UserDTO> users)
         {
             string usersJson = JsonConvert.SerializeObject(users);
-            var result = await DoActionWithDataByUrl(HttpMethod.Post, _userController + "/all", token, usersJson);
+            var result = await DoActionWithDataByUrl(HttpMethod.Post, _userController + "/mCreate", token, usersJson);
 
             return result;
         }
