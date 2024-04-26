@@ -54,5 +54,22 @@ namespace Entities.Models
                 ExecutorId = ExecutorId
             };
         }
+
+        public TaskModel ToShortDto()
+        {
+            return new TaskModel
+            {
+                Id = Id,
+                Name = Name,
+                Description = Description,
+                CreatedDate = CreatedDate,
+                StartDate = StartDate,
+                EndDate = EndDate,
+                DeskId = DeskId,
+                Column = Column,
+                CreatorId = CreatorId,
+                ExecutorId = ExecutorId
+            };
+        }
     }
 }

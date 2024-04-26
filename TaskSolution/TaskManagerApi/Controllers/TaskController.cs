@@ -26,6 +26,9 @@ namespace TaskManagerApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTasksByDeskId(int deskId)
         {
+            var user = _userService.GetUser(HttpContext.User.Identity.Name);
+            if (user == null) return Unauthorized();
+
             var tasks = await _taskService.GetAll(deskId);
 
             return Ok(tasks);
@@ -44,6 +47,9 @@ namespace TaskManagerApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
+            var user = _userService.GetUser(HttpContext.User.Identity.Name);
+            if (user == null) return Unauthorized();
+
             var task = _taskService.Get(id);
 
             return task == null ? NotFound() : Ok(task);

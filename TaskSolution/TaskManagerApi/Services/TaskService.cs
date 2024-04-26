@@ -69,19 +69,19 @@ namespace TaskManagerApi.Services
             });
         }
 
-        public async Task<IEnumerable<CommonDTO>> GetAll(int deskId)
+        public async Task<IEnumerable<TaskModel>> GetAll(int deskId)
         {
             return await _db.Tasks
                 .Where(t => t.DeskId == deskId)
-                .Select(t => t.ToDto() as CommonDTO)
+                .Select(t => t.ToShortDto())
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<CommonDTO>> GetByUser(int userId)
+        public async Task<IEnumerable<TaskModel>> GetByUser(int userId)
         {
             return await _db.Tasks
                 .Where(t => t.CreatorId == userId || t.ExecutorId == userId)
-                .Select(t => t.ToDto() as CommonDTO)
+                .Select(t => t.ToShortDto())
                 .ToListAsync();
         }
     }
