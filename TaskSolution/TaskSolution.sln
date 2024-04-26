@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManagerApi", "TaskManag
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{BB568C00-FE5F-4455-B813-1A5FCEF0DA7B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagerWPF", "TaskManagerWPF\TaskManagerWPF.csproj", "{6C620915-566B-46F4-AD64-C6EB8A87F9F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagerWPFTests", "TaskManagerWPFTests\TaskManagerWPFTests.csproj", "{085D4893-B14E-4378-8C9B-61D5B7CDAAAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{BB568C00-FE5F-4455-B813-1A5FCEF0DA7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB568C00-FE5F-4455-B813-1A5FCEF0DA7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB568C00-FE5F-4455-B813-1A5FCEF0DA7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C620915-566B-46F4-AD64-C6EB8A87F9F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C620915-566B-46F4-AD64-C6EB8A87F9F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C620915-566B-46F4-AD64-C6EB8A87F9F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C620915-566B-46F4-AD64-C6EB8A87F9F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{085D4893-B14E-4378-8C9B-61D5B7CDAAAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{085D4893-B14E-4378-8C9B-61D5B7CDAAAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{085D4893-B14E-4378-8C9B-61D5B7CDAAAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{085D4893-B14E-4378-8C9B-61D5B7CDAAAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
