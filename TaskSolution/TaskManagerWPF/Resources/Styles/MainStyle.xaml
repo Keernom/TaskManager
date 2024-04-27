@@ -9,6 +9,7 @@
         <Setter Property="Height" Value="20"/>
         <Setter Property="FontStyle" Value="{StaticResource commonFontStyle}"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="0,3"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -20,7 +21,9 @@
                             CornerRadius="{StaticResource commonCornerRadius}"
                             BorderThickness="1"
                             Background="White"
-                            BorderBrush="Black"/>
+                            BorderBrush="Black">
+                        <ScrollViewer Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -30,6 +33,7 @@
         <Setter Property="Height" Value="20"/>
         <Setter Property="FontStyle" Value="{StaticResource commonFontStyle}"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="0,3"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -41,7 +45,9 @@
                             CornerRadius="{StaticResource commonCornerRadius}"
                             BorderThickness="1"
                             Background="White"
-                            BorderBrush="Black"/>
+                            BorderBrush="Black">
+                        <ScrollViewer Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
