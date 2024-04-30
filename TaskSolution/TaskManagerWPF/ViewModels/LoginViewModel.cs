@@ -162,10 +162,10 @@ namespace TaskManagerWPF.ViewModels
 
         private void OpenMainWindow()
         {
-            _currentWindow.Close();
-
             MainWindow window = new MainWindow();
             window.Show();
+
+            _currentWindow.Close();
         }
         #endregion
     }
