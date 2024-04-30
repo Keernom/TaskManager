@@ -9,7 +9,8 @@
         ResizeMode="NoResize"
         xmlns:prism ="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Name="LogWindow">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -36,6 +37,31 @@
                     Command="{Binding GetUserFromDBCommand}"
                     CommandParameter="{Binding ElementName=UserPassword}"/>
         </StackPanel>
-        
+
+        <StackPanel
+            Grid.Row="1"
+            Orientation="Vertical"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Stretch">
+
+            <StackPanel.Style>
+                <Style TargetType="StackPanel">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CurrentUserCache}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                            <Setter Property="Height" Value="0"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Style>
+            
+            <TextBlock Text="Предыдущий пользователь"
+                       Style="{StaticResource commonTBlock}"/>
+
+            <Button Content="{Binding CurrentUserCache.Login}"
+                    Command="{Binding LoginFromCacheCommand}"
+                    CommandParameter="{Binding ElementName=LogWindow}"
+                    Style="{StaticResource commonBtn}"/>
+        </StackPanel>
     </Grid>
 </Window>
