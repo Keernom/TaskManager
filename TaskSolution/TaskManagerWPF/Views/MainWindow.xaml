@@ -5,13 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskManagerWPF.Views"
         mc:Ignorable="d"
-        Title="MainWindow" 
-        Height="450" Width="800"
-        MinHeight="200" MinWidth="300"
+        Title="MainWindow" Height="450" Width="800"
         xmlns:prism ="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         WindowStartupLocation="CenterScreen">
     <Grid>
-
+        
     </Grid>
 </Window>
