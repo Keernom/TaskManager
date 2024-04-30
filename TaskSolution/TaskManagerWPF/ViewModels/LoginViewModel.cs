@@ -1,8 +1,10 @@
 ﻿using Entities.DTOs;
+using Newtonsoft.Json;
 using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,22 +12,29 @@ using System.Windows;
 using System.Windows.Controls;
 using TaskManagerWPF.Models;
 using TaskManagerWPF.Services;
+using TaskManagerWPF.Views;
 
 namespace TaskManagerWPF.ViewModels
 {
     public class LoginViewModel : BindableBase
     {
-        UserRequestService _userRequestService;
+        private string _cachePath = Path.GetTempPath() + "userTaskManager.txt";
+        private UserRequestService _userRequestService;
+        private Window _currentWindow;
 
         #region COMMANDS
 
         public DelegateCommand<object> GetUserFromDBCommand { get; private set; }
+        public DelegateCommand<object> LoginFromCacheCommand { get; private set; }
 
         #endregion
 
         public LoginViewModel()
         {
             GetUserFromDBCommand = new DelegateCommand<object>(GetUserFromDB);
+            LoginFromCacheCommand = new DelegateCommand<object>(LoginFromCache);
+
+            CurrentUserCache = GetUserCache();
             _userRequestService = new UserRequestService();
         }
 
@@ -56,6 +65,18 @@ namespace TaskManagerWPF.ViewModels
             }
         }
 
+        private UserCache _currentUserCache;
+
+        public UserCache CurrentUserCache
+        {
+            get => _currentUserCache;
+            set 
+            { 
+                _currentUserCache = value; 
+                RaisePropertyChanged(nameof(CurrentUserCache));
+            }
+        }
+
         #endregion
 
         #region METHODS
@@ -64,6 +85,13 @@ namespace TaskManagerWPF.ViewModels
         {
             var passbox = parameter as PasswordBox;
             UserPassword = passbox.Password;
+            _currentWindow = Window.GetWindow(passbox);
+
+            bool isNewUser = false;
+            if (UserLogin != CurrentUserCache?.Login || UserPassword != CurrentUserCache?.Password)
+            {
+                isNewUser = true;
+            }
 
             var res = _userRequestService.GetToken(UserLogin, UserPassword);
 
@@ -71,9 +99,73 @@ namespace TaskManagerWPF.ViewModels
             {
                 AuthToken = res.token;
                 UserDTO userDTO = _userRequestService.GetUser(AuthToken).user;
-                MessageBox.Show(userDTO.FirstName);
+
+                if (isNewUser)
+                {
+                    var saveUserCacheMessage = MessageBox.Show("Хотите сохранить логин и пароль?", "Сохранение данных", MessageBoxButton.YesNo);
+
+                    if (saveUserCacheMessage == MessageBoxResult.Yes)
+                    {
+                        UserCache userCache = new UserCache()
+                        {
+                            Login = UserLogin,
+                            Password = UserPassword,
+                        };
+
+                        CreateUserCache(userCache);
+                    }
+                }
+
+                OpenMainWindow();
             }
-            
+        }
+
+        private void CreateUserCache(UserCache userCache)
+        {
+            string jsonUser = JsonConvert.SerializeObject(userCache);
+
+            using (StreamWriter sw = new StreamWriter(_cachePath, false, Encoding.Default))
+            {
+                sw.Write(jsonUser);
+                MessageBox.Show("Успех!");
+            }
+        }
+
+        private UserCache GetUserCache()
+        {
+            bool isCacheExist = File.Exists(_cachePath);
+            if (!isCacheExist) return null;
+
+            string text = File.ReadAllText(_cachePath);
+            if (text.Length == 0 ) return null;
+
+            return JsonConvert.DeserializeObject<UserCache>(text);
+        }
+
+        private void LoginFromCache(object wnd)
+        {
+            _currentWindow = wnd as Window;
+
+            UserLogin = CurrentUserCache.Login;
+            UserPassword = CurrentUserCache.Password;
+
+            var res = _userRequestService.GetToken(UserLogin, UserPassword);
+
+            if (res.code == System.Net.HttpStatusCode.OK)
+            {
+                AuthToken = res.token;
+                UserDTO userDTO = _userRequestService.GetUser(AuthToken).user;
+
+                OpenMainWindow();
+            }
+        }
+
+        private void OpenMainWindow()
+        {
+            _currentWindow.Close();
+
+            MainWindow window = new MainWindow();
+            window.Show();
         }
         #endregion
     }
