@@ -6,13 +6,30 @@
         xmlns:local="clr-namespace:TaskManagerWPF.Views"
         mc:Ignorable="d"
         Title="MainWindow" 
-        Height="450" 
-        Width="800"
+        Height="600" Width="1000"
         MinWidth="300" MinHeight="200"
         xmlns:prism ="http://prismlibrary.com/"
         prism:ViewModelLocator.AutoWireViewModel="True"
         WindowStartupLocation="CenterScreen">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250" MinWidth="150"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <GridSplitter Grid.Column="0"
+                      Style="{StaticResource commonGS}"/>
+
+        <Grid Grid.Column="0">
+            <ItemsControl ItemsSource="{Binding NavButtons}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Command="{Binding Value}"
+                            Style="{StaticResource commonBtn}">
+                            <TextBlock Text="{Binding Key}" Style="{StaticResource commonTBlock}"/>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
     </Grid>
 </Window>

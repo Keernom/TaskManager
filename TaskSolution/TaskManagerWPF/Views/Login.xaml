@@ -23,11 +23,15 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
             Width="250">
-            
+
+            <TextBlock Text="Логин"
+                       Style="{StaticResource commonTBlock}"/>
             <TextBox 
                 Text="{Binding UserLogin}" 
                 Style="{StaticResource commonTBox}"/>
-            
+
+            <TextBlock Text="Пароль"
+                       Style="{StaticResource commonTBlock}"/>
             <PasswordBox
                 x:Name="UserPassword"
                 Style="{StaticResource commonPBox}"/>
