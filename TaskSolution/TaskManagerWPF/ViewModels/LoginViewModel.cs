@@ -116,6 +116,7 @@ namespace TaskManagerWPF.ViewModels
                     }
                 }
 
+                CurrentUser = userDTO;
                 OpenMainWindow();
             }
         }
@@ -155,6 +156,7 @@ namespace TaskManagerWPF.ViewModels
             {
                 AuthToken = res.token;
                 UserDTO userDTO = _userRequestService.GetUser(AuthToken).user;
+                CurrentUser = userDTO;
 
                 OpenMainWindow();
             }
@@ -163,6 +165,7 @@ namespace TaskManagerWPF.ViewModels
         private void OpenMainWindow()
         {
             MainWindow window = new MainWindow();
+            window.DataContext = new MainWindowViewModel(AuthToken, CurrentUser);
             window.Show();
 
             _currentWindow.Close();
