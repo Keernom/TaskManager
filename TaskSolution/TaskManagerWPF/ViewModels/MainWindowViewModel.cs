@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using TaskManagerWPF.Models;
+using TaskManagerWPF.Views;
 using TaskManagerWPF.Views.Pages;
 
 namespace TaskManagerWPF.ViewModels
@@ -28,10 +29,11 @@ namespace TaskManagerWPF.ViewModels
 
         #endregion
 
-        public MainWindowViewModel(AuthToken authToken, UserDTO user)
+        public MainWindowViewModel(AuthToken authToken, UserDTO user, Window currentWindow = null)
         {
             AuthToken = authToken;
             User = user;
+            _currentWindow = currentWindow;
 
             OpenInfoPageCommand = new DelegateCommand(OpenInfoPage);
             NavButtons.Add(_userInfoBtnName, OpenInfoPageCommand);
@@ -53,6 +55,8 @@ namespace TaskManagerWPF.ViewModels
 
             LogoutCommand = new DelegateCommand(Logout);
             NavButtons.Add(_logoutBtnName, LogoutCommand);
+
+            OpenInfoPage();
         }
 
         #region PROPERTIES
@@ -64,6 +68,8 @@ namespace TaskManagerWPF.ViewModels
         private readonly string _logoutBtnName = "Выход";
 
         private readonly string _manageUsersBtnName = "Пользователи";
+
+        private Window _currentWindow;
 
         private Dictionary<string, DelegateCommand> _navButtons = new();
 
@@ -124,8 +130,6 @@ namespace TaskManagerWPF.ViewModels
                 RaisePropertyChanged(nameof(SelectedPage));
             }
         }
-
-
         #endregion
 
         #region METHODS
@@ -157,8 +161,15 @@ namespace TaskManagerWPF.ViewModels
 
         private void Logout()
         {
-            SelectedPageName = _logoutBtnName;
-            ShowMessage(_logoutBtnName);
+            var question = MessageBox.Show("Вы уверены?", "Выход", MessageBoxButton.YesNo);
+
+            if (question == MessageBoxResult.Yes && _currentWindow != null)
+            {
+                Login loginWindow = new Login();
+                loginWindow.Show();
+
+                _currentWindow.Close();
+            }
         }
 
         private void OpenManageUsersPage()
