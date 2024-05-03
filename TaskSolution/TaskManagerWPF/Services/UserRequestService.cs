@@ -43,6 +43,12 @@ namespace TaskManagerWPF.Services
             return user;
         }
 
+        public (UserDTO user, HttpStatusCode code) GetUserById(AuthToken token, int? id)
+        {
+            var user = GetDataByUrl<UserDTO>(_userController + $"/{id}", token);
+            return user;
+        }
+
         public async Task<HttpStatusCode> DeleteUser(AuthToken token, int userId)
         {
             var result = await DoActionWithDataByUrl(HttpMethod.Delete, _userController + $"/{userId}", token);
