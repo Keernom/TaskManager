@@ -36,5 +36,10 @@ namespace Entities.DTOs
             Status = status;
             RegistrationDate = DateTime.Now;
         }
+
+        public override string ToString()
+        {
+            return $"{FirstName} {LastName}";
+        }
     }
 }
