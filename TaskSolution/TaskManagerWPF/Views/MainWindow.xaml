@@ -23,11 +23,31 @@
                     <DataTemplate>
                         <Button Command="{Binding Value}"
                             Style="{StaticResource commonBtn}">
-                            <TextBlock Text="{Binding Key}" Style="{StaticResource commonTBlock}"/>
+                            <TextBlock Text="{Binding Key}" Style="{StaticResource headerTBlock}"/>
                         </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            
+            <Border 
+                BorderThickness="0,0,0,2"
+                Style="{StaticResource commonB}"/>
+
+            <TextBlock
+                Text="{Binding SelectedPageName}"
+                Style="{StaticResource headerTBlock}"/>
+
+            <Frame Grid.Row="1"
+                   NavigationUIVisibility="Hidden"
+                   Content="{Binding SelectedPage}"/>
         </Grid>
     </Grid>
 </Window>
