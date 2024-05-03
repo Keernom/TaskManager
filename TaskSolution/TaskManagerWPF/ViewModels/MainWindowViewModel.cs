@@ -8,7 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using TaskManagerWPF.Models;
+using TaskManagerWPF.Views.Pages;
 
 namespace TaskManagerWPF.ViewModels
 {
@@ -98,6 +100,31 @@ namespace TaskManagerWPF.ViewModels
             }
         }
 
+        private string _selectedPageName;
+
+        public string SelectedPageName
+        {
+            get { return _selectedPageName; }
+            set 
+            { 
+                _selectedPageName = value; 
+                RaisePropertyChanged(nameof(SelectedPageName));
+            }
+        }
+
+
+        private Page _selectedPage;
+
+        public Page SelectedPage
+        {
+            get { return _selectedPage; }
+            set 
+            { 
+                _selectedPage = value; 
+                RaisePropertyChanged(nameof(SelectedPage));
+            }
+        }
+
 
         #endregion
 
@@ -105,31 +132,38 @@ namespace TaskManagerWPF.ViewModels
 
         private void OpenInfoPage()
         {
-            ShowMessage(_userInfoBtnName);
+            Page page = new UserInfoPage();
+            page.DataContext = this;
+            OpenPage(page, _userInfoBtnName);
         }
 
         private void OpenTasksPage()
         {
+            SelectedPageName = _userTasksBtnName;
             ShowMessage(_userTasksBtnName);
         }
 
         private void OpenDesksPage()
         {
+            SelectedPageName = _userDesksBtnName;
             ShowMessage(_userDesksBtnName);
         }
 
         private void OpenProjectsPage()
         {
+            SelectedPageName = _userProjectsBtnName;
             ShowMessage(_userProjectsBtnName);
         }
 
         private void Logout()
         {
+            SelectedPageName = _logoutBtnName;
             ShowMessage(_logoutBtnName);
         }
 
         private void OpenManageUsersPage()
         {
+            SelectedPageName = _manageUsersBtnName;
             ShowMessage(_manageUsersBtnName);
         }
 
@@ -138,6 +172,12 @@ namespace TaskManagerWPF.ViewModels
         private void ShowMessage(string message)
         {
             MessageBox.Show(message);
+        }
+
+        private void OpenPage(Page page, string pageName)
+        {
+            SelectedPageName = pageName;
+            SelectedPage = page;
         }
     }
 }
