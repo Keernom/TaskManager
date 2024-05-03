@@ -137,14 +137,13 @@ namespace TaskManagerWPF.ViewModels
         private void OpenInfoPage()
         {
             Page page = new UserInfoPage();
-            page.DataContext = this;
-            OpenPage(page, _userInfoBtnName);
+            OpenPage(page, _userInfoBtnName, this);
         }
 
         private void OpenTasksPage()
         {
-            SelectedPageName = _userTasksBtnName;
-            ShowMessage(_userTasksBtnName);
+            Page page = new UserTasksPage();
+            OpenPage(page, _userTasksBtnName, new UserTasksPageViewModel(AuthToken));
         }
 
         private void OpenDesksPage()
@@ -185,10 +184,11 @@ namespace TaskManagerWPF.ViewModels
             MessageBox.Show(message);
         }
 
-        private void OpenPage(Page page, string pageName)
+        private void OpenPage(Page page, string pageName, BindableBase viewModel)
         {
             SelectedPageName = pageName;
             SelectedPage = page;
+            SelectedPage.DataContext = viewModel;
         }
     }
 }
