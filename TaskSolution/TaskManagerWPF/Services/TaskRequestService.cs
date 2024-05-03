@@ -24,7 +24,7 @@ namespace TaskManagerWPF.Services
 
         public (List<TaskDTO> tasks, HttpStatusCode code) GetUsersTasks(AuthToken token)
         {
-            var tasks = GetDataByUrl<List<TaskDTO>>(_taskController, token);
+            var tasks = GetDataByUrl<List<TaskDTO>>(_taskController + "/user", token);
             return tasks;
         }
 
