@@ -14,6 +14,8 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
 
+        <GridSplitter Grid.Column="0" Style="{StaticResource commonGS}"/>
+
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -37,17 +39,11 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Style="{StaticResource commonB}">
+                            <Border Style="{StaticResource projectPanelBorder}">
                                 <StackPanel Margin="10">
                                     <TextBlock Text="{Binding Path=Model.Name}"
                                                Style="{StaticResource commonTBlock}"/>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Members: "
-                                                   Style="{StaticResource commonTBlock}"/>
-                                        <TextBlock Text="{Binding Path=Model.UsersIds.Count}"
-                                                   Style="{StaticResource commonTBlock}"/>
-                                    </StackPanel>
-                                    
+
                                     <Image Source="{Binding Path=Image}" 
                                            Width="100"
                                            Height="100"/>
@@ -55,12 +51,14 @@
                                     <Button Content="Открыть" 
                                             Command="{Binding Path=DataContext.ShowProjectInfoCommand, 
                                         RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}"/>
+                                            CommandParameter="{Binding Path=Model.Id}"
+                                            Style="{StaticResource commonBtn}"/>
 
                                     <Button Content="Редактировать" 
                                             Command="{Binding Path=DataContext.OpenEditProjectWndCommand, 
                                         RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}"/>
+                                            CommandParameter="{Binding Path=Model.Id}"
+                                            Style="{StaticResource commonBtn}"/>
                                 </StackPanel>
                             </Border>
                         </DataTemplate>
@@ -70,6 +68,15 @@
         </Grid>
 
         <Grid Grid.Column="1">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SelectedProject.Model}" Value="{x:Null}">
+                            <Setter Property="Width" Value="0"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
