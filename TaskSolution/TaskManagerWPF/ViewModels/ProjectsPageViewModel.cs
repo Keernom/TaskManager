@@ -1,6 +1,8 @@
 ﻿using Entities.DTOs;
+using Entities.Models;
 using Prism.Commands;
 using Prism.Mvvm;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Documents;
@@ -58,6 +60,8 @@ namespace TaskManagerWPF.ViewModels
                     ProjectUsers = SelectedProject.Model.UsersIds?
                         .Select(uId => _userRequestService.GetUserById(_authToken, uId).user)
                         .ToList();
+                else
+                    ProjectUsers = new List<UserDTO>();
             }
         }
 
@@ -81,16 +85,28 @@ namespace TaskManagerWPF.ViewModels
             _viewService.ShowMessage(nameof(OpenNewProjectWnd));
         }
 
-        private void OpenEditProjectWnd(object param)
+        private void OpenEditProjectWnd(object projectId)
         {
-            SelectedProject = param as CommonDtoClient<ProjectDTO>;
-            _viewService.ShowMessage(nameof(OpenEditProjectWnd));
+            SelectedProject = GetProjectClientById(projectId);
         }
 
-        private void ShowProjectInfo(object param)
+        private void ShowProjectInfo(object projectId)
         {
-            SelectedProject = param as CommonDtoClient<ProjectDTO>;
-            _viewService.ShowMessage(nameof(ShowProjectInfo));
+            SelectedProject = GetProjectClientById(projectId);
+        }
+
+        private CommonDtoClient<ProjectDTO> GetProjectClientById(object projectId)
+        {
+            try
+            {
+                int id = (int)projectId;
+                var project = _projectRequestService.GetProjectById(_authToken, id).project;
+                return new CommonDtoClient<ProjectDTO>(project);
+            }
+            catch (FormatException)
+            {
+                return new CommonDtoClient<ProjectDTO>(null);
+            }
         }
         #endregion
     }
