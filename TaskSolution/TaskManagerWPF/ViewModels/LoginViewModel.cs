@@ -20,6 +20,7 @@ namespace TaskManagerWPF.ViewModels
     {
         private string _cachePath = Path.GetTempPath() + "userTaskManager.txt";
         private UserRequestService _userRequestService;
+        private CommonViewService _commonViewService;
         private Window _currentWindow;
 
         #region COMMANDS
@@ -36,6 +37,7 @@ namespace TaskManagerWPF.ViewModels
 
             CurrentUserCache = GetUserCache();
             _userRequestService = new UserRequestService();
+            _commonViewService = new CommonViewService();
         }
 
         #region PROPERTIES
@@ -128,7 +130,7 @@ namespace TaskManagerWPF.ViewModels
             using (StreamWriter sw = new StreamWriter(_cachePath, false, Encoding.Default))
             {
                 sw.Write(jsonUser);
-                MessageBox.Show("Успех!");
+                _commonViewService.ShowMessage("Успех!");
             }
         }
 

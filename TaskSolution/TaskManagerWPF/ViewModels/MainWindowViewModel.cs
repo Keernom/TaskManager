@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using TaskManagerWPF.Models;
+using TaskManagerWPF.Services;
 using TaskManagerWPF.Views;
 using TaskManagerWPF.Views.Pages;
 
@@ -17,6 +18,8 @@ namespace TaskManagerWPF.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
+        private CommonViewService _viewService;
+
         #region COMMANDS
 
         public DelegateCommand OpenInfoPageCommand { get; private set; }
@@ -31,6 +34,8 @@ namespace TaskManagerWPF.ViewModels
 
         public MainWindowViewModel(AuthToken authToken, UserDTO user, Window currentWindow = null)
         {
+            _viewService = new CommonViewService();
+
             AuthToken = authToken;
             User = user;
             _currentWindow = currentWindow;
@@ -149,13 +154,13 @@ namespace TaskManagerWPF.ViewModels
         private void OpenDesksPage()
         {
             SelectedPageName = _userDesksBtnName;
-            ShowMessage(_userDesksBtnName);
+            _viewService.ShowMessage(_userDesksBtnName);
         }
 
         private void OpenProjectsPage()
         {
-            SelectedPageName = _userProjectsBtnName;
-            ShowMessage(_userProjectsBtnName);
+            Page page = new ProjectsPage();
+            OpenPage(page, _userProjectsBtnName, new ProjectsPageViewModel(AuthToken));
         }
 
         private void Logout()
@@ -174,15 +179,10 @@ namespace TaskManagerWPF.ViewModels
         private void OpenManageUsersPage()
         {
             SelectedPageName = _manageUsersBtnName;
-            ShowMessage(_manageUsersBtnName);
+            _viewService.ShowMessage(_manageUsersBtnName);
         }
 
         #endregion
-
-        private void ShowMessage(string message)
-        {
-            MessageBox.Show(message);
-        }
 
         private void OpenPage(Page page, string pageName, BindableBase viewModel)
         {
